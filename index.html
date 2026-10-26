@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Salus — what customers signal, and what to settle</title>
+  <style>
+    :root {
+      --bg: #181818;
+      --text: #ececec;
+      --muted: #a8a8a8;
+      --faint: #8d8d8d;
+      --line: #2c2c2c;
+      --fill: #222222;
+      --fill-2: #282828;
+      --accent: #3d8bfd;
+      --on-accent: #ffffff;
+      --info: #3d8bfd;
+      --warning: #d4a017;
+      --danger: #e15d5d;
+      --track: #2a2a2a;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin: 0 0 8px;
+    }
+    h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 0 8px;
+    }
+    h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+    p { margin: 0 0 12px; }
+    .lede, .note, caption, .source {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .source { font-size: 12px; color: var(--faint); margin-top: 8px; }
+    .callout {
+      border: 1px solid var(--line);
+      border-left-width: 3px;
+      background: var(--fill);
+      padding: 14px 16px;
+      margin: 20px 0;
+    }
+    .callout.warning { border-left-color: var(--warning); }
+    .callout.danger { border-left-color: var(--danger); }
+    .callout strong { display: block; margin-bottom: 4px; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin: 20px 0 8px;
+    }
+    .stat .value {
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+    .stat .value.warning { color: var(--warning); }
+    .stat .value.danger { color: var(--danger); }
+    .stat .label { color: var(--muted); font-size: 13px; margin-top: 4px; }
+    hr { border: 0; border-top: 1px solid var(--line); margin: 28px 0; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+    .bar-row {
+      display: grid;
+      grid-template-columns: minmax(140px, 180px) 1fr 40px;
+      gap: 8px;
+      align-items: center;
+      margin: 0 0 8px;
+      font-size: 13px;
+    }
+    .bar-label { color: var(--text); }
+    .bar-track { height: 8px; background: var(--track); }
+    .bar-fill { height: 8px; }
+    .bar-fill.info { background: var(--info); }
+    .bar-fill.warning { background: var(--warning); }
+    .bar-value { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 16px; }
+    button.pill {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font: inherit;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    button.pill[aria-pressed="true"] {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--on-accent);
+    }
+    .table-wrap { overflow: auto; border: 1px solid var(--line); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 720px; }
+    th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); font-weight: 600; background: var(--fill); position: sticky; top: 0; }
+    tbody tr:nth-child(even) { background: var(--fill); }
+    .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; }
+    .dot.danger { background: var(--danger); }
+    .dot.warning { background: var(--warning); }
+    .dot.info { background: var(--info); }
+    .when { white-space: nowrap; }
+    @media (max-width: 800px) {
+      .stats, .grid { grid-template-columns: 1fr; }
+      .bar-row { grid-template-columns: 1fr; gap: 2px; margin-bottom: 14px; }
+      .bar-value { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Salus: what customers signal, and what to settle</h1>
+    <p class="lede">Public-opinion evidence for Salus, a product that would collect medications, conditions, vaccinations, appointments, and bills for a person and their family, then suggest what to do. These are not this team's customers. They are the prior to test.</p>
+
+    <div class="callout warning">
+      <strong>The jobs are familiar. The holder and the advice are not.</strong>
+      People already use provider and insurer apps for records, appointments, and prescriptions, and many want that information to reach their clinician. Concern jumps when a private technology company holds the data, and trust falls further when AI reads the record to give advice. The family layer adds people who never agreed to be in the file.
+    </div>
+
+    <section class="stats" aria-label="Headline figures">
+      <div class="stat"><div class="value">3 in 4</div><div class="label">U.S. adults used a health app or site in the past year</div></div>
+      <div class="stat"><div class="value warning">75%</div><div class="label">Concerned if a private tech company holds their health data</div></div>
+      <div class="stat"><div class="value danger">32%</div><div class="label">Would trust AI advice drawn from their medical record</div></div>
+      <div class="stat"><div class="value">3 in 10</div><div class="label">Multi-app users who find juggling those apps difficult</div></div>
+    </section>
+    <p class="source">Source: KFF Health Tracking Poll, Sept 23–29, 2025, 1,334 U.S. adults. Privacy figure is very or somewhat concerned. AI figure is a great deal or a fair amount of trust. Multi-app difficulty is among people who use more than one health app, website, or account.</p>
+
+    <hr>
+
+    <h2>What people already do, and who they worry about</h2>
+    <p>Use is broad. About 65% of adults say these tools have made managing care easier, and about 5% say they have made it harder. The opening is specific tasks, especially records, visits, and medications. Consolidation is secondary: half of people who have used health apps use more than one, and most of them say they cope.</p>
+
+    <div class="grid">
+      <section>
+        <h3>Health-app tasks in the past year</h3>
+        <div id="tasks"></div>
+        <p class="source">Percent of all adults. Asked of people who have ever used a health care app or website, reported on the total adult base. Source: KFF Health Tracking Poll, Sept 23–29, 2025.</p>
+      </section>
+      <section>
+        <h3>Privacy concern by who runs the app</h3>
+        <div id="privacy"></div>
+        <p class="source">Percent of U.S. adults who would be very or somewhat concerned. A hospital-run app draws the least concern. Salus would sit in the private-technology row. Source: KFF Health Tracking Poll, Sept 23–29, 2025.</p>
+      </section>
+    </div>
+
+    <h3>Two different AI questions</h3>
+    <p>KFF asked about AI on a health care app. 41% would trust an AI chatbot to make appointments or message their doctor. 32% would trust AI that accesses the medical record to provide personalized information or advice. 8% would trust either use a great deal. Trust stays under half in every age group.</p>
+    <p>EBRI and Greenwald's 2024 survey of 2,011 privately insured adults ages 21–64 found about three in five comfortable with AI inside smart health technology such as wearables and trackers, and about two-thirds wishing that data were shared more effectively with their doctor. 57% wished it were shared more effectively with their insurer. Comfort with a step tracker is a different claim from advice on a medical record. Use the KFF number for Salus.</p>
+    <p class="source">Sources: KFF, Sept 23–29, 2025. EBRI Fast Facts #538, July 24, 2025, from the 2024 Consumer Engagement in Health Care Survey.</p>
+
+    <hr>
+
+    <h2>Risks to settle</h2>
+    <p>Ordered by when they bind. The first group can make the service unsafe or unlawful even if customers like a demo. This is a product brief for counsel, not a legal opinion.</p>
+    <div class="filters" role="group" aria-label="Filter risks">
+      <button class="pill" type="button" data-band="all" aria-pressed="true">All issues</button>
+      <button class="pill" type="button" data-band="before" aria-pressed="false">Settle before build</button>
+      <button class="pill" type="button" data-band="design" aria-pressed="false">Design around</button>
+      <button class="pill" type="button" data-band="watch" aria-pressed="false">Watch</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>When</th><th>Issue</th><th>Why it matters</th><th>What it implies</th></tr>
+        </thead>
+        <tbody id="risks"></tbody>
+      </table>
+    </div>
+    <p class="source">Regulatory anchors to hand counsel: HHS guidance on the access right, health apps, and APIs; the FTC mobile health app tool and Health Breach Notification Rule; state consumer-health laws such as Washington's My Health My Data Act; COPPA for children under 13; state minor-consent statutes; FDA clinical-decision-support and device questions if the software diagnoses or directs treatment.</p>
+
+    <div class="callout danger">
+      <strong>Family sharing is the sharp edge</strong>
+      The useful version is a parent tracking a young child's vaccines, or an adult child helping a parent who has agreed. The harmful version is one person seeing a teenager's confidential care, a former partner's appointments, or an aging parent's diagnoses after consent no longer holds. Build the second case out of the data model before inviting the first family.
+    </div>
+
+    <hr>
+
+    <h2>What to ask your own customers</h2>
+    <p>Talk to people who would be harmed by a wrong assumption, not only people who already track their health. In each interview, put a specific record on the table. A medication list, a teen therapy note, a bill with a diagnosis. Ask what they would do next.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Who to recruit</th><th>What to learn</th><th>Decision it gates</th></tr>
+        </thead>
+        <tbody id="research"></tbody>
+      </table>
+    </div>
+    <p class="source">Patient-community color, not a national sample: The Light Collective, Tangled in the Web (2024), surveyed roughly 300 to 377 people. 74% were moderately to extremely concerned about health information shared without consent. 63% feared hackers, 57% sharing without consent, and 33% an insurer learning their conditions. On AI in health care, 79% were concerned their information could be used in a way that harms them, 76% cited misinformation, 69% incorrect diagnoses, and 52% bias. Use these as prompts, then measure them in your own sample.</p>
+
+    <hr>
+
+    <h2>Scope that matches the evidence</h2>
+    <p>Start with one adult's medications and appointments, connected through patient-directed access, with the source and date on every item. Family access stays off until each adult accepts a defined proxy, and it stays closed for categories the law treats as confidential for minors. Suggestions are reminders and questions for the next visit.</p>
+    <p>Generative advice waits until three things exist: a written intended use, a rule for what the product refuses to say when the chart is incomplete, and a counsel review of device status, privacy, and liability. Bills wait until the health record itself is trusted. Advertising, sale, insurer access, employer access, and training on identifiable records stay out of the business model.</p>
+  </main>
+  <script>
+    const tasks = [
+      ["Records or lab results", 71],
+      ["Appointments", 61],
+      ["Prescriptions", 59],
+      ["Message a clinician", 55],
+      ["Claims or bills", 46],
+      ["Video visits", 35],
+      ["Chronic-condition care", 21]
+    ];
+    const privacy = [
+      ["Government", 78],
+      ["Private technology company", 75],
+      ["Health insurer", 64],
+      ["Hospital or clinic", 52]
+    ];
+    const risks = [
+      ["before", "danger", "Settle before build", "The account holder is often not the patient", "A spouse, teen, adult child, or former partner has their own right to decide who sees diagnoses, medications, and bills. One family login grants access nobody separately approved.", "Each adult needs their own account. Proxy access is explicit, scoped, revocable, and logged. Uploading someone else's records is not consent."],
+      ["before", "danger", "Settle before build", "Adolescent records are not a parent's records", "Many states let minors consent to reproductive, mental health, and substance-use care, and limit what a parent may see. A family vault can expose those records.", "Block parent view of confidential minor categories. Plan the handoff when a child turns 18, including deletion of the parent's copy."],
+      ["before", "danger", "Settle before build", "A shared vault can be used for control", "In an unsafe household, medications, appointments, locations, and bills show where someone gets care. The person who pays for the family plan can hold that over everyone else.", "No silent sharing. Each person can hide categories, leave the plan, and export or delete their data without the organizer's approval."],
+      ["before", "danger", "Settle before build", "Advice will be heard as clinical guidance", "KFF (Sept 2025) found 32% of adults would trust an app that uses AI on their medical record to give personalized information or advice. An incomplete medication list plus a confident suggestion can delay care or miss an interaction.", "Ship reminders and questions to raise with a clinician. Hold generative advice until counsel and a safety review define the intended use, including possible FDA device status."],
+      ["before", "danger", "Settle before build", "Customers will assume HIPAA still applies", "HHS guidance: once a person sends records to an app that is not a covered entity or a business associate, HIPAA no longer protects that copy. The FTC Act, the Health Breach Notification Rule, and state consumer-health laws still can.", "Say this in the product at connect time. Take the federal and state list to counsel before any portal integration or model training."],
+      ["design", "warning", "Design around", "Secondary use ends the product", "In The Light Collective's 2024 patient and caregiver survey, 53% would stop using an app that shared health information with advertisers, and 25% would use it less. Family linkage also makes re-identification easier.", "No ads, no sale, no insurer or employer access, and no training on identifiable records. Default those off. Only 29% of that survey regularly read privacy policies, so the control has to be in the product."],
+      ["design", "warning", "Design around", "Portal passwords concentrate the breach", "Medications, conditions, vaccines, appointments, bills, and several identities in one account are a high-value target. Stored portal passwords and screen scraping add other systems to the blast radius.", "Connect only through patient-directed access such as SMART on FHIR and payer APIs. Assume the FTC breach-notice rule will apply to an unauthorized disclosure."],
+      ["design", "warning", "Design around", "A partial chart will look complete", "Portals miss out-of-network care, paper records, behavioral health silos, and pharmacy mismatches. Manual upload is partial and goes stale. EBRI's 2024 survey found privately insured adults question the accuracy of health-tech data.", "Show source and date on every item. Withhold suggestions when the record is missing medications, allergies, or a recent update. Never present the vault as the legal medical record."],
+      ["design", "warning", "Design around", "The job is coordination with a clinician", "EBRI/Greenwald 2024: about two-thirds of privately insured adults wished smart-health data were shared more effectively with their doctor, and 57% with their insurer.", "A private copy the clinician never sees solves a weaker job and can split the plan of care. Design the output as something to take to a visit."],
+      ["watch", "info", "Watch", "Fragmentation is a real pain for a minority", "KFF: 51% of people who have used health apps use more than one. About 3 in 10 of those adults find that difficult. Most say they manage.", "Test which artifacts a person would actually move, and which they will leave at the source."],
+      ["watch", "info", "Watch", "The heaviest users of care are the hardest to serve safely", "KFF found lower recent portal use among adults with lower incomes and without a college degree. About 1 in 10 Medicare adults 65+ say these tools make care harder, and about 1 in 5 have never used them.", "Recruit those groups before locking the design. An app that only works for people who already live in a portal will miss the stated user and give worse advice where data is thinnest."],
+      ["watch", "info", "Watch", "Bills pull in financial and identity data", "Explanations of benefits and payments can include member IDs, account numbers, and sometimes Social Security numbers, on top of diagnoses.", "Treat billing as a later, separate consent with a higher security bar. Counsel should check financial-privacy obligations, not only health privacy."],
+      ["watch", "info", "Watch", "Life events break a permanent family record", "Divorce, death, loss of capacity, a teen turning 18, and a request to delete all collide with a longitudinal archive and with any audit of advice the company gave.", "Write the retention and access rules for those events before the first family invite. Deletion has to be real, including backups and model inputs."],
+      ["watch", "info", "Watch", "Support will be asked to practice medicine", "People will write in about a denied claim, a wrong dose, or whether to stop a drug. The company cannot answer coverage or clinical questions the interface implied it could.", "Script support to route clinical questions back to a clinician and billing questions back to the payer. Measure those contacts from the first pilot."]
+    ];
+    const research = [
+      ["Adults who already use two or more portals", "Which of medications, conditions, vaccines, appointments, and bills they would move, and who they would let hold them", "Whether consolidation is the job, and whether a new company can be the holder"],
+      ["Parents of children under 12", "What they track today for vaccines, visits, and medications", "Whether a narrow pediatric record is a real wedge, with a parent as legal representative"],
+      ["Parents of teenagers", "Whether they expect to see therapy, reproductive, and substance-use information", "If they expect full visibility, the family model conflicts with minor confidentiality"],
+      ["Adult children helping a parent who still decides", "How siblings, paper, and portal proxy access work today", "Proxy rules: scope, revocation, and what changes if capacity changes"],
+      ["People managing a chronic condition across specialists", "What suggestion they would follow without calling their clinician", "The ceiling on advice. Anything they would act on alone is a safety requirement, not a feature"],
+      ["People who have left a shared household", "Who should still see past appointments, bills, and locations", "Whether the family graph can be undone"],
+      ["People who rarely use portals", "What they would upload, and what would make the app unusable", "Stops the team from designing only for people who already manage digital care"]
+    ];
+
+    function bars(targetId, rows, tone) {
+      const root = document.getElementById(targetId);
+      root.replaceChildren();
+      rows.forEach(function (row) {
+        const wrap = document.createElement("div");
+        wrap.className = "bar-row";
+        const label = document.createElement("div");
+        label.className = "bar-label";
+        label.textContent = row[0];
+        const track = document.createElement("div");
+        track.className = "bar-track";
+        const fill = document.createElement("div");
+        fill.className = "bar-fill " + tone;
+        fill.style.width = row[1] + "%";
+        track.appendChild(fill);
+        const value = document.createElement("div");
+        value.className = "bar-value";
+        value.textContent = row[1] + "%";
+        wrap.append(label, track, value);
+        root.appendChild(wrap);
+      });
+    }
+
+    function cell(text) {
+      const td = document.createElement("td");
+      td.textContent = text;
+      return td;
+    }
+
+    function renderRisks(band) {
+      const body = document.getElementById("risks");
+      body.replaceChildren();
+      risks.filter(function (risk) {
+        return band === "all" || risk[0] === band;
+      }).forEach(function (risk) {
+        const tr = document.createElement("tr");
+        const when = document.createElement("td");
+        when.className = "when";
+        const dot = document.createElement("span");
+        dot.className = "dot " + risk[1];
+        when.append(dot, document.createTextNode(risk[2]));
+        tr.append(when, cell(risk[3]), cell(risk[4]), cell(risk[5]));
+        body.appendChild(tr);
+      });
+    }
+
+    function renderResearch() {
+      const body = document.getElementById("research");
+      research.forEach(function (row) {
+        const tr = document.createElement("tr");
+        row.forEach(function (text) { tr.appendChild(cell(text)); });
+        body.appendChild(tr);
+      });
+    }
+
+    bars("tasks", tasks, "info");
+    bars("privacy", privacy, "warning");
+    renderRisks("all");
+    renderResearch();
+
+    document.querySelectorAll("button.pill").forEach(function (button) {
+      button.addEventListener("click", function () {
+        document.querySelectorAll("button.pill").forEach(function (other) {
+          other.setAttribute("aria-pressed", other === button ? "true" : "false");
+        });
+        renderRisks(button.dataset.band);
+      });
+    });
+  </script>
+</body>
+</html>
