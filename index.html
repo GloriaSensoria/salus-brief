@@ -133,203 +133,84 @@
       .bar-row { grid-template-columns: 1fr; gap: 2px; margin-bottom: 14px; }
       .bar-value { text-align: left; }
     }
+  
+    .gate { max-width: 420px; margin: 18vh auto 0; padding: 0 24px; }
+    .gate h1 { margin-bottom: 8px; }
+    .gate form { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; align-items: center; }
+    .gate label { flex: 0 0 100%; }
+    .gate input { flex: 1; min-width: 180px; border: 1px solid var(--line); background: #fff; color: var(--text); font: inherit; padding: 8px 10px; }
+    .gate button { border: 0; background: var(--accent); color: var(--on-accent); font: inherit; padding: 8px 14px; cursor: pointer; }
+    .gate .error { color: var(--danger); font-size: 13px; min-height: 1.2em; margin-top: 8px; }
   </style>
 </head>
 <body>
-  <main>
-    <h1>Salus: what customers signal, and what to settle</h1>
-    <p class="lede">Public-opinion evidence for Salus, a product that would collect medications, conditions, vaccinations, appointments, and bills for a person and their family, then suggest what to do. These are not this team's customers. They are the prior to test.</p>
-
-    <div class="callout warning">
-      <strong>The jobs are familiar. The holder and the advice are not.</strong>
-      People already use provider and insurer apps for records, appointments, and prescriptions, and many want that information to reach their clinician. Concern jumps when a private technology company holds the data, and trust falls further when AI reads the record to give advice. The family layer adds people who never agreed to be in the file.
-    </div>
-
-    <section class="stats" aria-label="Headline figures">
-      <div class="stat"><div class="value">3 in 4</div><div class="label">U.S. adults used a health app or site in the past year</div></div>
-      <div class="stat"><div class="value warning">75%</div><div class="label">Concerned if a private tech company holds their health data</div></div>
-      <div class="stat"><div class="value danger">32%</div><div class="label">Would trust AI advice drawn from their medical record</div></div>
-      <div class="stat"><div class="value">3 in 10</div><div class="label">Multi-app users who find juggling those apps difficult</div></div>
-    </section>
-    <p class="source">Source: KFF Health Tracking Poll, Sept 23–29, 2025, 1,334 U.S. adults. Privacy figure is very or somewhat concerned. AI figure is a great deal or a fair amount of trust. Multi-app difficulty is among people who use more than one health app, website, or account.</p>
-
-    <hr>
-
-    <h2>What people already do, and who they worry about</h2>
-    <p>Use is broad. About 65% of adults say these tools have made managing care easier, and about 5% say they have made it harder. The opening is specific tasks, especially records, visits, and medications. Consolidation is secondary: half of people who have used health apps use more than one, and most of them say they cope.</p>
-
-    <div class="grid">
-      <section>
-        <h3>Health-app tasks in the past year</h3>
-        <div id="tasks"></div>
-        <p class="source">Percent of all adults. Asked of people who have ever used a health care app or website, reported on the total adult base. Source: KFF Health Tracking Poll, Sept 23–29, 2025.</p>
-      </section>
-      <section>
-        <h3>Privacy concern by who runs the app</h3>
-        <div id="privacy"></div>
-        <p class="source">Percent of U.S. adults who would be very or somewhat concerned. A hospital-run app draws the least concern. Salus would sit in the private-technology row. Source: KFF Health Tracking Poll, Sept 23–29, 2025.</p>
-      </section>
-    </div>
-
-    <h3>Two different AI questions</h3>
-    <p>KFF asked about AI on a health care app. 41% would trust an AI chatbot to make appointments or message their doctor. 32% would trust AI that accesses the medical record to provide personalized information or advice. 8% would trust either use a great deal. Trust stays under half in every age group.</p>
-    <p>EBRI and Greenwald's 2024 survey of 2,011 privately insured adults ages 21–64 found about three in five comfortable with AI inside smart health technology such as wearables and trackers, and about two-thirds wishing that data were shared more effectively with their doctor. 57% wished it were shared more effectively with their insurer. Comfort with a step tracker is a different claim from advice on a medical record. Use the KFF number for Salus.</p>
-    <p class="source">Sources: KFF, Sept 23–29, 2025. EBRI Fast Facts #538, July 24, 2025, from the 2024 Consumer Engagement in Health Care Survey.</p>
-
-    <hr>
-
-    <h2>Risks to settle</h2>
-    <p>Ordered by when they bind. The first group can make the service unsafe or unlawful even if customers like a demo. This is a product brief for counsel, not a legal opinion.</p>
-    <div class="filters" role="group" aria-label="Filter risks">
-      <button class="pill" type="button" data-band="all" aria-pressed="true">All issues</button>
-      <button class="pill" type="button" data-band="before" aria-pressed="false">Settle before build</button>
-      <button class="pill" type="button" data-band="design" aria-pressed="false">Design around</button>
-      <button class="pill" type="button" data-band="watch" aria-pressed="false">Watch</button>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>When</th><th>Issue</th><th>Why it matters</th><th>What it implies</th></tr>
-        </thead>
-        <tbody id="risks"></tbody>
-      </table>
-    </div>
-    <p class="source">Regulatory anchors to hand counsel: HHS guidance on the access right, health apps, and APIs; the FTC mobile health app tool and Health Breach Notification Rule; state consumer-health laws such as Washington's My Health My Data Act; COPPA for children under 13; state minor-consent statutes; FDA clinical-decision-support and device questions if the software diagnoses or directs treatment.</p>
-
-    <div class="callout danger">
-      <strong>Family sharing is the sharp edge</strong>
-      The useful version is a parent tracking a young child's vaccines, or an adult child helping a parent who has agreed. The harmful version is one person seeing a teenager's confidential care, a former partner's appointments, or an aging parent's diagnoses after consent no longer holds. Build the second case out of the data model before inviting the first family.
-    </div>
-
-    <hr>
-
-    <h2>What to ask your own customers</h2>
-    <p>Talk to people who would be harmed by a wrong assumption, not only people who already track their health. In each interview, put a specific record on the table. A medication list, a teen therapy note, a bill with a diagnosis. Ask what they would do next.</p>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>Who to recruit</th><th>What to learn</th><th>Decision it gates</th></tr>
-        </thead>
-        <tbody id="research"></tbody>
-      </table>
-    </div>
-    <p class="source">Patient-community color, not a national sample: The Light Collective, Tangled in the Web (2024), surveyed roughly 300 to 377 people. 74% were moderately to extremely concerned about health information shared without consent. 63% feared hackers, 57% sharing without consent, and 33% an insurer learning their conditions. On AI in health care, 79% were concerned their information could be used in a way that harms them, 76% cited misinformation, 69% incorrect diagnoses, and 52% bias. Use these as prompts, then measure them in your own sample.</p>
-
-    <hr>
-
-    <h2>Scope that matches the evidence</h2>
-    <p>Start with one adult's medications and appointments, connected through patient-directed access, with the source and date on every item. Family access stays off until each adult accepts a defined proxy, and it stays closed for categories the law treats as confidential for minors. Suggestions are reminders and questions for the next visit.</p>
-    <p>Generative advice waits until three things exist: a written intended use, a rule for what the product refuses to say when the chart is incomplete, and a counsel review of device status, privacy, and liability. Bills wait until the health record itself is trusted. Advertising, sale, insurer access, employer access, and training on identifiable records stay out of the business model.</p>
+  <main class="gate">
+    <h1>Salus</h1>
+    <p class="lede">Enter the password to view the brief.</p>
+    <form id="gate-form">
+      <label class="source" for="gate-password">Password</label>
+      <input id="gate-password" type="password" autocomplete="current-password" required>
+      <button type="submit">Continue</button>
+    </form>
+    <p class="error" id="gate-error" hidden>That password is not correct.</p>
   </main>
   <script>
-    const tasks = [
-      ["Records or lab results", 71],
-      ["Appointments", 61],
-      ["Prescriptions", 59],
-      ["Message a clinician", 55],
-      ["Claims or bills", 46],
-      ["Video visits", 35],
-      ["Chronic-condition care", 21]
-    ];
-    const privacy = [
-      ["Government", 78],
-      ["Private technology company", 75],
-      ["Health insurer", 64],
-      ["Hospital or clinic", 52]
-    ];
-    const risks = [
-      ["before", "danger", "Settle before build", "The account holder is often not the patient", "A spouse, teen, adult child, or former partner has their own right to decide who sees diagnoses, medications, and bills. One family login grants access nobody separately approved.", "Each adult needs their own account. Proxy access is explicit, scoped, revocable, and logged. Uploading someone else's records is not consent."],
-      ["before", "danger", "Settle before build", "Adolescent records are not a parent's records", "Many states let minors consent to reproductive, mental health, and substance-use care, and limit what a parent may see. A family vault can expose those records.", "Block parent view of confidential minor categories. Plan the handoff when a child turns 18, including deletion of the parent's copy."],
-      ["before", "danger", "Settle before build", "A shared vault can be used for control", "In an unsafe household, medications, appointments, locations, and bills show where someone gets care. The person who pays for the family plan can hold that over everyone else.", "No silent sharing. Each person can hide categories, leave the plan, and export or delete their data without the organizer's approval."],
-      ["before", "danger", "Settle before build", "Advice will be heard as clinical guidance", "KFF (Sept 2025) found 32% of adults would trust an app that uses AI on their medical record to give personalized information or advice. An incomplete medication list plus a confident suggestion can delay care or miss an interaction.", "Ship reminders and questions to raise with a clinician. Hold generative advice until counsel and a safety review define the intended use, including possible FDA device status."],
-      ["before", "danger", "Settle before build", "Customers will assume HIPAA still applies", "HHS guidance: once a person sends records to an app that is not a covered entity or a business associate, HIPAA no longer protects that copy. The FTC Act, the Health Breach Notification Rule, and state consumer-health laws still can.", "Say this in the product at connect time. Take the federal and state list to counsel before any portal integration or model training."],
-      ["design", "warning", "Design around", "Secondary use ends the product", "In The Light Collective's 2024 patient and caregiver survey, 53% would stop using an app that shared health information with advertisers, and 25% would use it less. Family linkage also makes re-identification easier.", "No ads, no sale, no insurer or employer access, and no training on identifiable records. Default those off. Only 29% of that survey regularly read privacy policies, so the control has to be in the product."],
-      ["design", "warning", "Design around", "Portal passwords concentrate the breach", "Medications, conditions, vaccines, appointments, bills, and several identities in one account are a high-value target. Stored portal passwords and screen scraping add other systems to the blast radius.", "Connect only through patient-directed access such as SMART on FHIR and payer APIs. Assume the FTC breach-notice rule will apply to an unauthorized disclosure."],
-      ["design", "warning", "Design around", "A partial chart will look complete", "Portals miss out-of-network care, paper records, behavioral health silos, and pharmacy mismatches. Manual upload is partial and goes stale. EBRI's 2024 survey found privately insured adults question the accuracy of health-tech data.", "Show source and date on every item. Withhold suggestions when the record is missing medications, allergies, or a recent update. Never present the vault as the legal medical record."],
-      ["design", "warning", "Design around", "The job is coordination with a clinician", "EBRI/Greenwald 2024: about two-thirds of privately insured adults wished smart-health data were shared more effectively with their doctor, and 57% with their insurer.", "A private copy the clinician never sees solves a weaker job and can split the plan of care. Design the output as something to take to a visit."],
-      ["watch", "info", "Watch", "Fragmentation is a real pain for a minority", "KFF: 51% of people who have used health apps use more than one. About 3 in 10 of those adults find that difficult. Most say they manage.", "Test which artifacts a person would actually move, and which they will leave at the source."],
-      ["watch", "info", "Watch", "The heaviest users of care are the hardest to serve safely", "KFF found lower recent portal use among adults with lower incomes and without a college degree. About 1 in 10 Medicare adults 65+ say these tools make care harder, and about 1 in 5 have never used them.", "Recruit those groups before locking the design. An app that only works for people who already live in a portal will miss the stated user and give worse advice where data is thinnest."],
-      ["watch", "info", "Watch", "Bills pull in financial and identity data", "Explanations of benefits and payments can include member IDs, account numbers, and sometimes Social Security numbers, on top of diagnoses.", "Treat billing as a later, separate consent with a higher security bar. Counsel should check financial-privacy obligations, not only health privacy."],
-      ["watch", "info", "Watch", "Life events break a permanent family record", "Divorce, death, loss of capacity, a teen turning 18, and a request to delete all collide with a longitudinal archive and with any audit of advice the company gave.", "Write the retention and access rules for those events before the first family invite. Deletion has to be real, including backups and model inputs."],
-      ["watch", "info", "Watch", "Support will be asked to practice medicine", "People will write in about a denied claim, a wrong dose, or whether to stop a drug. The company cannot answer coverage or clinical questions the interface implied it could.", "Script support to route clinical questions back to a clinician and billing questions back to the payer. Measure those contacts from the first pilot."]
-    ];
-    const research = [
-      ["Adults who already use two or more portals", "Which of medications, conditions, vaccines, appointments, and bills they would move, and who they would let hold them", "Whether consolidation is the job, and whether a new company can be the holder"],
-      ["Parents of children under 12", "What they track today for vaccines, visits, and medications", "Whether a narrow pediatric record is a real wedge, with a parent as legal representative"],
-      ["Parents of teenagers", "Whether they expect to see therapy, reproductive, and substance-use information", "If they expect full visibility, the family model conflicts with minor confidentiality"],
-      ["Adult children helping a parent who still decides", "How siblings, paper, and portal proxy access work today", "Proxy rules: scope, revocation, and what changes if capacity changes"],
-      ["People managing a chronic condition across specialists", "What suggestion they would follow without calling their clinician", "The ceiling on advice. Anything they would act on alone is a safety requirement, not a feature"],
-      ["People who have left a shared household", "Who should still see past appointments, bills, and locations", "Whether the family graph can be undone"],
-      ["People who rarely use portals", "What they would upload, and what would make the app unusable", "Stops the team from designing only for people who already manage digital care"]
-    ];
+    const payload = {
+      iterations: 100000,
+      salt: 'cnqTuNv96np+I4yWvbsvdw==',
+      iv: '+Tl1quBMHIzZ3enK',
+      data: '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'
+    };
 
-    function bars(targetId, rows, tone) {
-      const root = document.getElementById(targetId);
-      root.replaceChildren();
-      rows.forEach(function (row) {
-        const wrap = document.createElement("div");
-        wrap.className = "bar-row";
-        const label = document.createElement("div");
-        label.className = "bar-label";
-        label.textContent = row[0];
-        const track = document.createElement("div");
-        track.className = "bar-track";
-        const fill = document.createElement("div");
-        fill.className = "bar-fill " + tone;
-        fill.style.width = row[1] + "%";
-        track.appendChild(fill);
-        const value = document.createElement("div");
-        value.className = "bar-value";
-        value.textContent = row[1] + "%";
-        wrap.append(label, track, value);
-        root.appendChild(wrap);
-      });
+    function b64ToBytes(value) {
+      const bin = atob(value);
+      const out = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+      return out;
     }
 
-    function cell(text) {
-      const td = document.createElement("td");
-      td.textContent = text;
-      return td;
+    async function unlock(password) {
+      const keyMaterial = await crypto.subtle.importKey(
+        "raw",
+        new TextEncoder().encode(password),
+        "PBKDF2",
+        false,
+        ["deriveKey"]
+      );
+      const key = await crypto.subtle.deriveKey(
+        { name: "PBKDF2", salt: b64ToBytes(payload.salt), iterations: payload.iterations, hash: "SHA-256" },
+        keyMaterial,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["decrypt"]
+      );
+      const plainBuffer = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: b64ToBytes(payload.iv) },
+        key,
+        b64ToBytes(payload.data)
+      );
+      return new TextDecoder().decode(plainBuffer);
     }
 
-    function renderRisks(band) {
-      const body = document.getElementById("risks");
-      body.replaceChildren();
-      risks.filter(function (risk) {
-        return band === "all" || risk[0] === band;
-      }).forEach(function (risk) {
-        const tr = document.createElement("tr");
-        const when = document.createElement("td");
-        when.className = "when";
-        const dot = document.createElement("span");
-        dot.className = "dot " + risk[1];
-        when.append(dot, document.createTextNode(risk[2]));
-        tr.append(when, cell(risk[3]), cell(risk[4]), cell(risk[5]));
-        body.appendChild(tr);
-      });
-    }
-
-    function renderResearch() {
-      const body = document.getElementById("research");
-      research.forEach(function (row) {
-        const tr = document.createElement("tr");
-        row.forEach(function (text) { tr.appendChild(cell(text)); });
-        body.appendChild(tr);
-      });
-    }
-
-    bars("tasks", tasks, "info");
-    bars("privacy", privacy, "warning");
-    renderRisks("all");
-    renderResearch();
-
-    document.querySelectorAll("button.pill").forEach(function (button) {
-      button.addEventListener("click", function () {
-        document.querySelectorAll("button.pill").forEach(function (other) {
-          other.setAttribute("aria-pressed", other === button ? "true" : "false");
+    document.getElementById("gate-form").addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const error = document.getElementById("gate-error");
+      error.hidden = true;
+      try {
+        const html = await unlock(document.getElementById("gate-password").value);
+        const template = document.createElement("template");
+        template.innerHTML = html;
+        const scripts = Array.from(template.content.querySelectorAll("script"));
+        scripts.forEach(function (script) { script.remove(); });
+        document.body.replaceChildren(template.content);
+        scripts.forEach(function (oldScript) {
+          const script = document.createElement("script");
+          script.textContent = oldScript.textContent;
+          document.body.appendChild(script);
         });
-        renderRisks(button.dataset.band);
-      });
+      } catch (err) {
+        error.hidden = false;
+      }
     });
   </script>
 </body>
